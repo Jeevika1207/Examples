@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickFlip - Buy & Sell Used Goods</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --background-color: #f8f9fa;
+            --card-background: #ffffff;
+            --text-color: #343a40;
+            --border-color: #dee2e6;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .header {
+            background-color: var(--card-background);
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .search-bar {
+            display: flex;
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .search-bar input {
+            border: none;
+            padding: 0.6rem 1rem;
+            outline: none;
+            width: 250px;
+        }
+
+        .search-bar button {
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0 1.2rem;
+            cursor: pointer;
+        }
+
+        .btn-post {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-post:hover {
+            background-color: #0056b3;
+        }
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            background-color: #e9ecef;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+        }
+
+        .main-content {
+            padding: 2rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .listings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background-color: var(--card-background);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .card-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .card-location {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+        
+        .card-location i {
+            margin-right: 0.3rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--text-color);
+            color: var(--background-color);
+            padding: 2rem 0;
+            margin-top: 3rem;
+            text-align: center;
+        }
+        .footer-bottom {
+             padding-top: 1rem;
+             border-top: 1px solid var(--secondary-color);
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container navbar">
+            <a href="#" class="logo">QuickFlip</a>
+            <div class="nav-actions">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search for anything...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <a href="#" class="btn-post"><i class="fas fa-plus-circle"></i> Post Ad</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1>Find Great Deals Locally</h1>
+                <p>Buy and sell everything from used cars to mobile phones and computers.</p>
+            </div>
+        </section>
+
+        <section class="main-content">
+            <div class="container">
+                <h2 class="section-title">Fresh Recommendations</h2>
+                <div class="listings-grid">
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=500&auto=format&fit=crop" alt="Laptop">
+                        <div class="card-content">
+                            <h3 class="card-title">Modern Laptop - 16GB RAM</h3>
+                            <p class="card-price">₹45,000</p>
+                            <p class="card-location"><i class="fas fa-map-marker-alt"></i> Chennai, Tamil Nadu</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ab?w=500&auto=format&fit=crop" alt="Shoes">
+                        <div class="card-content">
+                            <h3 class="card-title">Brand New Running Shoes</h3>
+                            <p class="card-price">₹2,500</p>
+                            <p class="card-location"><i class="fas fa-map-marker-alt"></i> Bengaluru, Karnataka</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&auto=format&fit=crop" alt="Sofa">
+                        <div class="card-content">
+                            <h3 class="card-title">Comfortable 3-Seater Sofa</h3>
+                            <p class="card-price">₹12,000</p>
+                            <p class="card-location"><i class="fas fa-map-marker-alt"></i> Salem, Tamil Nadu</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&auto=format&fit=crop" alt="Camera">
+                        <div class="card-content">
+                            <h3 class="card-title">Vintage Film Camera</h3>
+                            <p class="card-price">₹8,500</p>
+                            <p class="card-location"><i class="fas fa-map-marker-alt"></i> Mumbai, Maharashtra</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1585060544863-67914ab08d52?w=500&auto=format&fit=crop" alt="Guitar">
+                        <div class="card-content">
+                            <h3 class="card-title">Acoustic Guitar with Bag</h3>
+                            <p class="card-price">₹4,000</p>
+                            <p class="card-location"><i class="fas fa-map-marker-alt"></i> Coimbatore, Tamil Nadu</p>
+                        </div>
+                    </div>
+                     <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1546484488-2a14309968a0?w=500&auto=format&fit=crop" alt="Bicycle">
+                        <div class="card-content">
+                            <h3 class="card-title">Mountain Bike - 21 Gears</h3>
+                            <p class="card-price">₹9,800</p>
+                            <p class="card-location"><i class="fas fa-map-marker-alt"></i> Hyderabad, Telangana</p>
+                        </div>
+                    </div>
+                     <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&auto=format&fit=crop" alt="Smartphone">
+                        <div class="card-content">
+                            <h3 class="card-title">OnePlus Nord - Gently Used</h3>
+                            <p class="card-price">₹17,000</p>
+                            <p class="card-location"><i class="fas fa-map-marker-alt"></i> Salem, Tamil Nadu</p>
+                        </div>
+                    </div>
+                     <div class="product-card">
+                        <img src="https://images.unsplash.com/photo-1618220179428-22790b461013?w=500&auto=format&fit=crop" alt="Chair">
+                        <div class="card-content">
+                            <h3 class="card-title">Ergonomic Office Chair</h3>
+                            <p class="card-price">₹6,000</p>
+                            <p class="card-location"><i class="fas fa-map-marker-alt"></i> New Delhi, Delhi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>QuickFlip is your trusted local marketplace.</p>
+            <div class="footer-bottom">
+                 <p>&copy; 2025 QuickFlip. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        console.log("Welcome to QuickFlip!");
+    </script>
+
+</body>
+</html>
