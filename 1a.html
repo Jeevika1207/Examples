@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jeevika M — Portfolio</title>
+  <meta name="description" content="Portfolio of Jeevika M — student, developer and aspiring data scientist." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#94a3b8; --accent:#7c3aed; --glass: rgba(255,255,255,0.04);
+      --radius:14px; --max-width:1100px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: linear-gradient(180deg, #071029 0%, #081426 40%); color:#e6eef8; -webkit-font-smoothing:antialiased;
+      line-height:1.5; padding:32px; display:flex; justify-content:center;
+    }
+    .container{width:100%; max-width:var(--max-width);} 
+
+    header{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:28px}
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{width:56px; height:56px; border-radius:12px; background:linear-gradient(135deg,var(--accent),#5b21b6); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px}
+    nav a{color:var(--muted); text-decoration:none; margin-left:14px}
+    nav a.cta{color:white; background:var(--accent); padding:8px 12px; border-radius:10px}
+
+    .hero{display:grid; grid-template-columns: 1fr 360px; gap:32px; align-items:center; margin-bottom:28px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:var(--radius); padding:24px; box-shadow: 0 6px 30px rgba(2,6,23,0.6);}
+    .intro h1{margin:0 0 8px 0; font-size:30px}
+    .intro p{color:var(--muted); margin:0 0 16px}
+    .actions{display:flex; gap:12px}
+    .btn{display:inline-block; padding:10px 14px; border-radius:10px; text-decoration:none; font-weight:600}
+    .btn-outline{border:1px solid rgba(255,255,255,0.06); color:var(--muted)}
+    .btn-primary{background:var(--accent); color:white}
+
+    .profile{display:flex; flex-direction:column; gap:12px; align-items:center}
+    .avatar{width:200px; height:200px; border-radius:16px; background:linear-gradient(180deg,#0b1220,#071029); display:flex; align-items:center; justify-content:center; font-size:44px; font-weight:700; color:var(--accent); border:1px solid rgba(255,255,255,0.03)}
+    .meta{color:var(--muted); text-align:center}
+
+    section{margin-bottom:20px}
+    .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+    .skills{display:flex; gap:8px; flex-wrap:wrap}
+    .pill{background:var(--glass); padding:8px 10px; border-radius:999px; color:var(--muted); font-weight:600}
+
+    .projects{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
+    .project{padding:16px; border-radius:12px; background:rgba(255,255,255,0.02)}
+    .project h3{margin:0 0 6px}
+    .project p{margin:0 0 8px; color:var(--muted); font-size:14px}
+    .project .tags{display:flex; gap:8px; flex-wrap:wrap}
+    .tag{font-size:12px; color:var(--muted)}
+
+    footer{padding:18px; text-align:center; color:var(--muted); font-size:14px}
+
+    /* responsive */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .projects{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width:560px){
+      body{padding:18px}
+      .grid-3{grid-template-columns:1fr}
+    }
+
+    /* small utilities */
+    .muted{color:var(--muted)}
+    .divider{height:1px; background:rgba(255,255,255,0.03); margin:18px 0; border-radius:4px}
+
+    .contact-form input, .contact-form textarea{width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:inherit}
+    .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    @media (max-width:640px){ .contact-grid{grid-template-columns:1fr} }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">JM</div>
+        <div>
+          <div style="font-weight:700">Jeevika M</div>
+          <div class="muted" style="font-size:13px">Computer Science student · Developer · Data Enthusiast</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact" class="cta">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="card intro">
+          <h1>Hi — I'm Jeevika</h1>
+          <p class="muted">I build web apps, analyze data, and work on small machine-learning projects. I enjoy turning data into simple, usable products.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#contact">Hire me</a>
+            <a class="btn btn-outline" href="#projects">View projects</a>
+            <a class="btn btn-outline" href="#" onclick="alert('Resume download placeholder — replace with a real file path')">Download resume</a>
+          </div>
+
+          <div class="divider"></div>
+
+          <div style="display:flex; gap:18px; flex-wrap:wrap;">
+            <div>
+              <div style="font-weight:700">Location</div>
+              <div class="muted">India</div>
+            </div>
+            <div>
+              <div style="font-weight:700">Email</div>
+              <div class="muted">jeevika.m07@gmail.com</div>
+            </div>
+            <div>
+              <div style="font-weight:700">Phone</div>
+              <div class="muted">+91 • (add number)</div>
+            </div>
+          </div>
+
+        </div>
+
+        <aside class="card profile">
+          <div class="avatar">JM</div>
+          <div class="meta">
+            <div style="font-weight:700">Full-Stack & Data</div>
+            <div class="muted" style="font-size:13px">Student | SQL · Python · Java · ML · Web</div>
+          </div>
+
+          <div style="width:100%">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+              <div class="muted">Top skills</div>
+              <div class="muted" style="font-size:13px">Experience: Internships & projects</div>
+            </div>
+            <div class="skills">
+              <div class="pill">HTML</div>
+              <div class="pill">CSS</div>
+              <div class="pill">JavaScript</div>
+              <div class="pill">Python</div>
+              <div class="pill">SQL / PL/SQL</div>
+              <div class="pill">Machine Learning</div>
+            </div>
+          </div>
+
+        </aside>
+      </section>
+
+      <section id="projects">
+        <h2 style="margin:0 0 12px">Selected projects</h2>
+        <div class="projects">
+          <article class="project">
+            <h3>Customer Behavior Analysis</h3>
+            <p class="muted">Clustered customers and predicted purchase behavior using GMM and XGBoost; visualized with Streamlit.</p>
+            <div class="tags"><span class="tag">Python</span> <span class="tag">GMM</span> <span class="tag">XGBoost</span> <span class="tag">Streamlit</span></div>
+          </article>
+
+          <article class="project">
+            <h3>Portfolio Website</h3>
+            <p class="muted">This single-page responsive portfolio — built with modern HTML and CSS. Includes contact form and project highlights.</p>
+            <div class="tags"><span class="tag">HTML</span> <span class="tag">CSS</span> <span class="tag">Responsive</span></div>
+          </article>
+
+          <article class="project">
+            <h3>Academic Dashboard</h3>
+            <p class="muted">Dashboard to show course progress and grades; uses SQLite and simple visualizations for insights.</p>
+            <div class="tags"><span class="tag">SQLite</span> <span class="tag">Dash</span></div>
+          </article>
+
+          <article class="project">
+            <h3>Java Utilities</h3>
+            <p class="muted">A set of Java programs for string processing, frequency counts and algorithm practice.</p>
+            <div class="tags"><span class="tag">Java</span> <span class="tag">Algorithms</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="skills">
+        <div class="card">
+          <h2 style="margin-top:0">Skills & tools</h2>
+          <div class="grid-3" style="margin-top:12px">
+            <div>
+              <h4 style="margin:0 0 8px">Languages</h4>
+              <div class="muted">Python · Java · SQL · JavaScript</div>
+            </div>
+            <div>
+              <h4 style="margin:0 0 8px">Frameworks & Tools</h4>
+              <div class="muted">XGBoost · scikit-learn · Streamlit · Flask · Git</div>
+            </div>
+            <div>
+              <h4 style="margin:0 0 8px">Data & ML</h4>
+              <div class="muted">Pandas · NumPy · Prophet · SHAP</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="experience">
+        <div class="card">
+          <h2 style="margin-top:0">Experience & Education</h2>
+          <div style="margin-top:12px">
+            <strong>Intern — Data / ML</strong>
+            <div class="muted">Summer 2024 — Worked on customer segmentation & model explainability</div>
+          </div>
+          <div style="margin-top:10px">
+            <strong>Bachelor of Computer Science</strong>
+            <div class="muted">Current student — Coursework: Data Structures, Databases, OS</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div class="card">
+          <h2 style="margin-top:0">Contact</h2>
+          <p class="muted">I'm open to internships and junior developer roles. Send a short message or email me directly.</p>
+
+          <form class="contact-form" onsubmit="event.preventDefault(); alert('This is a demo form. Replace action with a server endpoint or mailto link.');">
+            <div class="contact-grid">
+              <input type="text" placeholder="Your name" required />
+              <input type="email" placeholder="Your email" required />
+            </div>
+            <div style="height:12px"></div>
+            <input type="text" placeholder="Subject" />
+            <div style="height:8px"></div>
+            <textarea rows="5" placeholder="Message"></textarea>
+            <div style="height:12px"></div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-primary" type="submit">Send message</button>
+              <a class="btn btn-outline" href="mailto:jeevika.m07@gmail.com">Email directly</a>
+            </div>
+          </form>
+
+          <div style="margin-top:14px; display:flex; gap:10px; align-items:center">
+            <a href="#" class="muted">GitHub</a>
+            <a href="#" class="muted">LinkedIn</a>
+            <a href="#" class="muted">LeetCode</a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <div class="muted">© "Jeevika M" — portfolio. Built with HTML & CSS. Available on request: full resume & code samples.</div>
+    </footer>
+  </div>
+
+</body>
+</html>
