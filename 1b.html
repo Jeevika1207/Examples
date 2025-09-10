@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MicroBlog — Simple Local Demo</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#94a3b8;--accent:#06b6d4;--glass:rgba(255,255,255,0.03);--radius:12px}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;background:linear-gradient(180deg,#071029,#071425);color:#e6eef8;padding:18px}
+    .app{max-width:980px;margin:0 auto;display:grid;grid-template-columns:240px 1fr;gap:18px}
+    .panel{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:16px;border-radius:var(--radius);box-shadow:0 6px 20px rgba(2,6,23,0.6)}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    h1{font-size:18px;margin:0}
+    .muted{color:var(--muted)}
+
+    /* left column */
+    .left{display:flex;flex-direction:column;gap:12px}
+    .user-list{display:flex;flex-direction:column;gap:8px}
+    .user{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:10px;background:var(--glass)}
+    .user strong{font-size:14px}
+    .btn{border:0;padding:8px 10px;border-radius:8px;font-weight:600;cursor:pointer}
+    .btn-follow{background:transparent;color:var(--accent);border:1px solid rgba(6,182,212,0.12)}
+    .btn-unfollow{background:var(--accent);color:#022;}
+
+    /* main column */
+    .compose{display:flex;flex-direction:column;gap:8px}
+    textarea{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;resize:none}
+    .compose-controls{display:flex;justify-content:space-between;align-items:center}
+    .filters{display:flex;gap:8px}
+    .filter{background:transparent;border:1px solid rgba(255,255,255,0.03);padding:6px 8px;border-radius:8px}
+
+    .timeline{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+    .post{padding:12px;border-radius:10px;background:rgba(255,255,255,0.02)}
+    .post .meta{display:flex;justify-content:space-between;align-items:center}
+    .post p{margin:8px 0 0}
+    .post .actions{display:flex;gap:8px;margin-top:8px}
+    .small{font-size:13px;color:var(--muted)}
+
+    .topbar{display:flex;gap:8px;align-items:center}
+    select, input{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+
+    footer{grid-column:1/-1;text-align:center;margin-top:14px;color:var(--muted);font-size:13px}
+
+    @media (max-width:880px){.app{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="panel left">
+      <header>
+        <h1>MicroBlog</h1>
+        <div class="small muted">Local demo</div>
+      </header>
+
+      <div>
+        <label class="small muted">Signed in as</label>
+        <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+          <select id="userSelector"></select>
+          <button class="btn" id="addUserBtn">+ New</button>
+        </div>
+      </div>
+
+      <div style="margin-top:10px">
+        <div class="small muted" style="margin-bottom:8px">People</div>
+        <div class="user-list" id="peopleList"></div>
+      </div>
+
+      <div style="margin-top:10px">
+        <div class="small muted">Your stats</div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <div class="small"><strong id="statPosts">0</strong><div class="muted">posts</div></div>
+          <div class="small"><strong id="statFollowing">0</strong><div class="muted">following</div></div>
+        </div>
+      </div>
+
+    </aside>
+
+    <main>
+      <div class="panel">
+        <div class="topbar">
+          <div class="small muted">Feed</div>
+          <div style="flex:1"></div>
+          <div class="filters">
+            <button class="filter" data-filter="following">Following</button>
+            <button class="filter" data-filter="all">All</button>
+            <button class="filter" data-filter="mine">My posts</button>
+          </div>
+        </div>
+
+        <div class="compose" style="margin-top:12px">
+          <textarea id="content" rows="4" maxlength="280" placeholder="What's happening? (max 280 chars)"></textarea>
+          <div class="compose-controls">
+            <div class="small muted">Characters left: <span id="chars">280</span></div>
+            <div>
+              <button class="btn" id="clearBtn">Clear</button>
+              <button class="btn btn-unfollow" id="postBtn">Post</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline" id="timeline"></div>
+      </div>
+
+      <div style="height:12px"></div>
+
+      <div class="panel">
+        <div class="small muted">About this demo</div>
+        <p class="muted small">This is a frontend-only microblog demo. It stores users, follow relationships and posts in your browser's localStorage so you can try posting, following and viewing a personalized feed. It's not a production app — no server, no auth, no real-time sync. Use the "+ New" button to create users, follow people using the Follow button, and switch the signed-in user from the dropdown.</p>
+      </div>
+
+    </main>
+
+    <footer>Local microblog demo • Data persisted in localStorage • Refreshing the page keeps data</footer>
+  </div>
+
+<script>
+// --- Simple local microblog logic (no backend) ---
+const LS_KEY = 'microblog_demo_v1'
+const DEFAULT_STATE = {
+  users: [
+    {id: 'alice', name: 'Alice'},
+    {id: 'bob', name: 'Bob'},
+    {id: 'carol', name: 'Carol'}
+  ],
+  follows: { // who follows whom: followerId: Set of followeeIds
+    'alice': new Set(['bob']),
+    'bob': new Set([]),
+    'carol': new Set(['alice','bob'])
+  },
+  posts: [
+    {id: genId(), author: 'bob', text: 'Hello world from Bob!', time: Date.now() - 1000*60*60*24},
+    {id: genId(), author: 'alice', text: 'Excited to try this microblog demo.', time: Date.now() - 1000*60*60*2}
+  ],
+  currentUser: 'alice'
+}
+
+function genId(){ return 'p_' + Math.random().toString(36).slice(2,9) }
+
+function load(){
+  const raw = localStorage.getItem(LS_KEY)
+  if(!raw) return hydrate(DEFAULT_STATE)
+  try{
+    const parsed = JSON.parse(raw, (k,v)=>{
+      if(k==='follows'){
+        const obj = {}
+        for(const key in v){ obj[key] = new Set(v[key]) }
+        return obj
+      }
+      return v
+    })
+    return parsed
+  }catch(e){ console.error('Failed to parse storage, resetting', e); return hydrate(DEFAULT_STATE) }
+}
+
+function hydrate(state){
+  // ensure sets and ids exist
+  if(!state.follows) state.follows = {}
+  for(const u of state.users){ if(!state.follows[u.id]) state.follows[u.id] = new Set() }
+  if(!state.posts) state.posts = []
+  if(!state.currentUser) state.currentUser = state.users[0].id
+  save(state)
+  return state
+}
+
+function save(state){
+  const copy = JSON.parse(JSON.stringify(state))
+  // convert sets to arrays for storage
+  const followsObj = {}
+  for(const key in state.follows){ followsObj[key] = Array.from(state.follows[key]) }
+  copy.follows = followsObj
+  localStorage.setItem(LS_KEY, JSON.stringify(copy))
+}
+
+let store = load()
+
+// --- DOM references ---
+const userSelector = document.getElementById('userSelector')
+const peopleList = document.getElementById('peopleList')
+const timeline = document.getElementById('timeline')
+const content = document.getElementById('content')
+const chars = document.getElementById('chars')
+const postBtn = document.getElementById('postBtn')
+const clearBtn = document.getElementById('clearBtn')
+const addUserBtn = document.getElementById('addUserBtn')
+const statPosts = document.getElementById('statPosts')
+const statFollowing = document.getElementById('statFollowing')
+const filters = document.querySelectorAll('.filter')
+let activeFilter = 'following'
+
+function render(){
+  renderUserSelector()
+  renderPeople()
+  renderTimeline()
+  updateStats()
+}
+
+function renderUserSelector(){
+  userSelector.innerHTML = ''
+  for(const u of store.users){
+    const opt = document.createElement('option')
+    opt.value = u.id; opt.textContent = u.name + ' ('+u.id+')'
+    if(u.id===store.currentUser) opt.selected = true
+    userSelector.appendChild(opt)
+  }
+}
+
+userSelector.addEventListener('change', e=>{
+  store.currentUser = e.target.value
+  save(store); render()
+})
+
+addUserBtn.addEventListener('click', ()=>{
+  const name = prompt('Enter new user name (e.g. Dave)')
+  if(!name) return
+  const id = name.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,12) || ('u'+Date.now())
+  if(store.users.find(x=>x.id===id)) return alert('User id already exists, pick another name or refresh')
+  store.users.push({id, name})
+  store.follows[id] = new Set()
+  store.currentUser = id
+  save(store); render()
+})
+
+function renderPeople(){
+  peopleList.innerHTML = ''
+  for(const u of store.users){
+    const el = document.createElement('div'); el.className='user'
+    const left = document.createElement('div'); left.innerHTML = `<strong>${u.name}</strong><div class="small muted">@${u.id}</div>`
+    const btn = document.createElement('button'); btn.className='btn'
+    if(u.id===store.currentUser){ btn.textContent = 'You'; btn.disabled = true; btn.classList.add('small') }
+    else{
+      const followingSet = store.follows[store.currentUser] || new Set()
+      if(followingSet.has(u.id)){ btn.textContent='Unfollow'; btn.classList.add('btn-unfollow'); btn.addEventListener('click', ()=>{ toggleFollow(u.id) }) }
+      else{ btn.textContent='Follow'; btn.classList.add('btn-follow'); btn.addEventListener('click', ()=>{ toggleFollow(u.id) }) }
+    }
+    el.appendChild(left); el.appendChild(btn); peopleList.appendChild(el)
+  }
+}
+
+function toggleFollow(personId){
+  const cur = store.currentUser
+  if(!store.follows[cur]) store.follows[cur] = new Set()
+  const s = store.follows[cur]
+  if(s.has(personId)) s.delete(personId)
+  else s.add(personId)
+  save(store); render()
+}
+
+content.addEventListener('input', e=>{ chars.textContent = 280 - e.target.value.length })
+clearBtn.addEventListener('click', ()=>{ content.value=''; chars.textContent=280 })
+
+postBtn.addEventListener('click', ()=>{
+  const txt = content.value.trim()
+  if(!txt) return alert('Please write something')
+  const post = {id: genId(), author: store.currentUser, text: txt, time: Date.now()}
+  store.posts.unshift(post)
+  content.value=''; chars.textContent=280
+  save(store); render()
+})
+
+function renderTimeline(){
+  timeline.innerHTML = ''
+  let posts = store.posts.slice()
+  if(activeFilter==='following'){
+    const following = store.follows[store.currentUser] || new Set()
+    // include your own posts as well
+    posts = posts.filter(p => p.author===store.currentUser || following.has(p.author))
+  }else if(activeFilter==='mine'){
+    posts = posts.filter(p => p.author===store.currentUser)
+  }
+
+  if(posts.length===0){
+    const e = document.createElement('div'); e.className='small muted'; e.textContent = 'No posts to show.'; timeline.appendChild(e); return
+  }
+
+  for(const p of posts){
+    const card = document.createElement('div'); card.className='post'
+    const user = store.users.find(u=>u.id===p.author) || {name:p.author,id:p.author}
+    const meta = document.createElement('div'); meta.className='meta'
+    meta.innerHTML = `<div><strong>${user.name}</strong> <span class="small muted">@${user.id}</span></div><div class="small muted">${timeAgo(p.time)}</div>`
+    const txt = document.createElement('p'); txt.textContent = p.text
+    const actions = document.createElement('div'); actions.className='actions'
+    const btnDel = document.createElement('button'); btnDel.className='btn'; btnDel.textContent = 'Delete'
+    btnDel.addEventListener('click', ()=>{ if(p.author!==store.currentUser) return alert('Can only delete your own posts'); if(confirm('Delete this post?')){ store.posts = store.posts.filter(x=>x.id!==p.id); save(store); render() } })
+    actions.appendChild(btnDel)
+    card.appendChild(meta); card.appendChild(txt); card.appendChild(actions); timeline.appendChild(card)
+  }
+}
+
+function updateStats(){
+  statPosts.textContent = store.posts.filter(p=>p.author===store.currentUser).length
+  statFollowing.textContent = (store.follows[store.currentUser]||new Set()).size
+}
+
+function timeAgo(ts){
+  const s = Math.floor((Date.now()-ts)/1000)
+  if(s<60) return s+'s'
+  const m = Math.floor(s/60); if(m<60) return m+'m'
+  const h = Math.floor(m/60); if(h<24) return h+'h'
+  const d = Math.floor(h/24); return d+'d'
+}
+
+filters.forEach(btn=>btn.addEventListener('click', ()=>{ activeFilter = btn.dataset.filter; filters.forEach(b=>b.style.opacity=1); btn.style.opacity=0.7; renderTimeline() }))
+
+function normalize(){
+  if(store.follows){
+    for(const k in store.follows){
+      if(!(store.follows[k] instanceof Set)) store.follows[k] = new Set(store.follows[k])
+    }
+  } else store.follows = {}
+  for(const u of store.users){ if(!store.follows[u.id]) store.follows[u.id] = new Set() }
+}
+
+normalize(); render()
+
+window.resetDemo = function(){ if(confirm('Reset demo data?')){ localStorage.removeItem(LS_KEY); location.reload() } }
+
+</script>
+</body>
+</html>
